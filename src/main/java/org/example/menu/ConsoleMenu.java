@@ -108,22 +108,25 @@ public class ConsoleMenu {
     }
 
     private int readAnimalAge(){
-        System.out.println("Enter animal age: ");
-        if(!scanner.hasNextInt()){
+        while(true) {
+
+            System.out.println("Enter animal age: ");
+            if (!scanner.hasNextInt()) {
+                scanner.nextLine();
+                System.out.println("Invalid age. Age must be a positive number");
+                continue;
+            }
+
+            int animalAge = scanner.nextInt();
             scanner.nextLine();
-            System.out.println("Invalid age. Age must be a positive number");
-            readAnimalAge();
+
+            if (animalAge < 0) {
+                System.out.println("Invalid age. Age must be a positive number");
+                continue;
+            }
+
+            return animalAge;
         }
-
-        int animalAge = scanner.nextInt();
-        scanner.nextLine();
-
-        if (animalAge < 0){
-            System.out.println("Invalid age. Age must be a positive number");
-            readAnimalAge();
-        }
-
-        return animalAge;
     }
 
     private Animal createAnimal(String animalSpecies, String animalName, int animalAge){

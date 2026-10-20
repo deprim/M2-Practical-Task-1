@@ -70,29 +70,49 @@ public class ConsoleMenu {
 
     private void handleAnimalMenuOption(){
 
+
+        String animalSpecies = readAnimalSpecies();
+        String animalName = readAnimalName();
+        int animalAge = readAnimalAge();
+        Animal animal = createAnimal(animalSpecies, animalName, animalAge);
+        shelter.addAnimal(animal);
+        System.out.println("Animal added successfully!");
+
+    }
+
+    private String readAnimalSpecies(){
         System.out.println("Enter animal type(Dog, Cat, Bird, Spider): ");
-        String animalType = scanner.nextLine().trim();
 
-        if(!animalType.equalsIgnoreCase("Dog") &&
-                !animalType.equalsIgnoreCase("Cat") &&
-                !animalType.equalsIgnoreCase("Bird") &&
-                !animalType.equalsIgnoreCase("Spider")){
+        String animalSpecies = scanner.nextLine().trim();
+        
+        if(!animalSpecies.equalsIgnoreCase("Dog") &&
+                !animalSpecies.equalsIgnoreCase("Cat") &&
+                !animalSpecies.equalsIgnoreCase("Bird") &&
+                !animalSpecies.equalsIgnoreCase("Spider")){
             System.out.println("Invalid animal type");
-            return;
+            return readAnimalSpecies();
         }
+        
+        return animalSpecies;
 
+    }
+
+    private String readAnimalName(){
         System.out.println("Enter animal name: ");
         String animalName = scanner.nextLine().trim();
         if (animalName.isEmpty()){
             System.out.println("Invalid name. Name cannot be empty");
-            return;
+            return readAnimalName();
         }
+        return animalName;
+    }
 
+    private int readAnimalAge(){
         System.out.println("Enter animal age: ");
         if(!scanner.hasNextInt()){
             scanner.nextLine();
             System.out.println("Invalid age. Age must be a positive number");
-            return;
+            readAnimalAge();
         }
 
         int animalAge = scanner.nextInt();
@@ -100,26 +120,20 @@ public class ConsoleMenu {
 
         if (animalAge < 0){
             System.out.println("Invalid age. Age must be a positive number");
-            return;
+            readAnimalAge();
         }
 
-        switch (animalType.toLowerCase()) {
-            case "dog":
-                shelter.addAnimal(new Dog(animalName, animalAge));
-                break;
-            case "cat":
-                shelter.addAnimal(new Cat(animalName, animalAge));
-                break;
-            case "bird":
-                shelter.addAnimal(new Bird(animalName, animalAge));
-                break;
-            case "spider":
-                shelter.addAnimal(new Spider(animalName, animalAge));
-                break;
-            default: System.out.println("Invalid animal type");
-        }
+        return animalAge;
+    }
 
-        System.out.println("Animal added successfully!");
+    private Animal createAnimal(String animalSpecies, String animalName, int animalAge){
+        return switch (animalSpecies.toLowerCase()) {
+            case "dog" -> new Dog(animalName, animalAge);
+            case "cat" -> new Cat(animalName, animalAge);
+            case "bird" -> new Bird(animalName, animalAge);
+            case "spider" -> new Spider(animalName, animalAge);
+            default -> throw new IllegalArgumentException("Invalid animal type");
+        };
 
     }
 
